@@ -1,0 +1,105 @@
+
+1.  hamne yha pokemon pr project bna rhe hai jisme ham useState ,useEffect , axios ka use kar rhe hai
+
+2.  sabse pahle example ke through hamne yha useEffect ko samjha ki kisi variable ya state variable tract kaise kiya ja sakta hai.
+    agar ham useEffect ke array ko empty rakhte hai to kisi bhi prakar ka tracking nhi hoga .
+    generally useEffect ka kam outer world se connect karne me hota hai, koi aisa kam karna ki component ke first load ya rerenderpr hona h for example koi data download kar ke lana h.
+
+3.  ab ham axios ka use karke pokemon api ko fetch karenge. yha axios ke use se aap api fetch karte hai aap chahe javascript (fetch api )
+    ka use karke api fetch kar sakte hai. axios hame promis base sentences deta hai es liye ham async await ka use karenge
+
+4. pokemon ko fetch karte hai to limited 20 pokemon show ho rhe h jabki aur bhi pokemon h to uske liye api ke dwara next aur previous pokemon
+   ka link milta h jise ham pagination ke taur par use kiya h
+   to hamne yha do state variable banaya
+   
+   const [nextUrl, setNextUrl] = useState('');
+   const [prevUrl, setPrevUrl] = useState('');
+    
+5.react router => 
+                ham ab react route ka use karne ja rhe h uske liye 
+
+                step1 - apne project me react router dom ko install karenge 
+                        npm install react-router-dom
+                
+                step2 - ham apne project me src/main.jsx file ko edit karenge
+                        createRoot(document.getElementById('root')).render(
+                            <BrowserRouter>
+                                <App />
+                            </BrowserRouter>
+                        )
+
+                step3 - ab ham new custom roter component banaye us component me different-2 route denge jisme ham bta sakte hai konse route ke andar konsa component render ho rha hai
+                        
+                        -> src/routes/CustomRoutes.jsx
+
+                        import { Routes, Route } from "react-router-dom"; 
+
+                        import Pokedex from "../components/Pokedex/pokedex";
+                        import PokemonDetails from "../components/PokemonDetails/PokemonDetails";
+
+                        function CustomRoutes() {
+                            return (
+                                <Routes>
+                                    <Route path="/" element={ <Pokedex /> } />
+                                    <Route path="/pokemon/:id" element={ <PokemonDetails /> } />
+                                </Routes>
+                            );
+                        }
+
+                    export default CustomRoutes;
+
+                step4 - src/App.jsx file me ham 
+                        
+                        return (
+                            <>
+                                <CustomRoutes />
+                            </>
+                        )
+
+
+5.  hamne abhi tak sare pokemon ko list kar liya ab ham chahte hai ki kisi bhi pokemon pr click karne pr uski details pta chal sake 
+    uske liye hamne alag component banaya h PokemonDetails.jsx. 
+
+    kisi bhi pokemon pr click karne ke bad hame url me ek dusara page ka path /pokemon/:id milega ex. (http://localhost:5173/pokemon/1)
+    becouse hamne router ka use kiya us router me hamne ese ek alag page me rakha hai.
+
+6.  ab hame url me mile id se pokemon ka detail find karna hai.
+    id ko url param se fetch karne ke liye react-router-dom me ek hook aata hai useParams.useParams ka use karke jo bhi url params me variable h use use kar sakte hai
+
+7. advance useState() =>
+                    hamne pokemonList.jsx me multiple useState banaya hai ab hota aisa h ki multiple useState banate vo sahi coding nhi hai
+                    yadi aapko multiple useState ka use h to  aap use ek object define karke use kar sakte hai.
+                    
+                    ex. const [pokemonListState, setPokemonListState] = useState({
+                            pokemonList: [],
+                            isLOading: true,
+                            pokedexUrl: 'https://pokeapi.co/api/v2/pokemon',
+                            nextUrl: '',
+                            prevUrl: ''
+
+                        }); 
+
+8. pls do not use multiple useState method object (ex. setPokemonListState()):-
+
+    ab yha kahne ka matlab ye hai ki jaise upar 7. advance useState() ke example me jo setPokemonListState() hai use multiple time use karte hai matlab ek se jyada bar use karte hai to vo nhi chalta
+    means error provide karta hai  uske liye hamne yha use bhi ek function ke andar object pass kar denge aisa documentation me diya hai
+     
+    ex. setPokemonListState((state) => ({ // yha hame extra function ex. (state) => (). pass karna pad rha,state vah ek object ka name h jise lena jaruri h becouse documentation me diya h.
+            ...state,
+            nextUrl: response.data.next, 
+            prevUrl: response.data.previous
+        }));  
+
+        ab es tarike se ese multiple time use kar sakte h jaise
+
+        setPokemonListState((state) => ({
+            ...state, 
+            pokemonList: pokeListResult,
+            isLOading: false
+        }));
+
+        ek aur denkhe 
+
+        setPokemonListState((state) => ({...state, isLOading: true}))
+
+
